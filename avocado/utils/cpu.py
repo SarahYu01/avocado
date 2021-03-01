@@ -132,7 +132,9 @@ def get_cpu_arch():
                  (b'^type', 'sparc64'),
                  (b'^flags.*:.* lm .*', 'x86_64'),
                  (b'^flags', 'i386'),
-                 (b'^hart\\s*: 1$', 'riscv')]
+                 (b'^hart\\s*: 1$', 'riscv'),
+                 (b'^isa.*:.*mips64.*', 'mips64'),
+                 (b'^isa.*:.*loongarch64.*', 'loongarch64')]
     cpuinfo = _get_cpu_info()
     for (pattern, arch) in cpu_table:
         if _list_matches(cpuinfo, pattern):
