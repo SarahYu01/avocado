@@ -206,7 +206,7 @@ def module_is_loaded(module_name):
     :rtype: bool
     """
     module_name = module_name.replace('-', '_')
-    return module_name in get_loaded_modules()
+    return module_name in get_loaded_modules() or module_name in get_builtin_modules()
 
 
 def get_loaded_modules():
@@ -258,3 +258,17 @@ def get_modules_dir():
     kernel_version = platform.uname()[2]
 
     return '/lib/modules/%s/kernel' % kernel_version
+
+
+# add support for builtin module check for loongnix64 and loongarch64 kvm
+def get_builtin_modules():
+    """
+    Gets lists of builtin modules.
+    :return: List of builtin modules.
+    """
+
+    kernel_version = platform.uname()[2]
+
+    module_path = '/lib/modules/' + kernel_version + '/modules.builtin'
+    with open(module_path, 'rb') as in_modules:
+        return [astring.to_text(_.split(b'/')[-1].split(b".")[0]) for _ in in_modules]
